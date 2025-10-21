@@ -1,6 +1,6 @@
-SAIL := ./vendor/bin/sail
+COMPOSE := docker-compose
 up:
-	$(SAIL) up -d
+	$(COMPOSE) up -d
 
 down:
-	$(SAIL) down
+	$(COMPOSE) down
