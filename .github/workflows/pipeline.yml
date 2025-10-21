@@ -25,6 +25,11 @@ jobs:
           php-version: 8.2
           coverage: none
 
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
