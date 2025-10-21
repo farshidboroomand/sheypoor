@@ -15,6 +15,7 @@
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.25",
         "laravel/sail": "^1.46",
+        "laravel/telescope": "^5.14",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "phpstan/phpstan": "^2.1",
