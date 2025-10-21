@@ -9,7 +9,6 @@ on:
     branches:
       - dev
       - master
-
 jobs:
   ci:
     name: Run tests and static analysis
@@ -25,13 +24,13 @@ jobs:
           php-version: 8.2
           coverage: none
 
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
       - name: Prepare environment
         run: |
           cp .env.example .env
           php artisan key:generate
-
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Run PHPUnit tests
         run: composer test
