@@ -44,6 +44,16 @@ jobs:
           echo "REDIS_HOST=redis" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
 
+      - name: Wait for Redis
+        run: |
+          for i in 1 2 3 4 5; do
+            nc -z -w 1 redis 6379 && exit 0
+            echo "Waiting for Redis... (Attempt $i/5)"
+            sleep 3
+          done
+          echo "Redis failed to start or connect after 5 attempts."
+          exit 1
+
       - name: Run PHPUnit tests
         run: composer test
 
