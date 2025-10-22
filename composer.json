@@ -73,7 +73,7 @@
             "./vendor/bin/pint"
         ],
         "analyse" : [
-            "vendor/bin/phpstan analyse -c phpstan.neon"
+            "php -d memory_limit=256M vendor/bin/phpstan analyse -c phpstan.neon"
         ]
     },
     "extra": {

@@ -13,7 +13,16 @@ jobs:
   ci:
     name: Run tests and static analysis
     runs-on: ubuntu-latest
-
+    services:
+      redis:
+        image: redis:6-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,6 +31,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+          extensions: redis
           coverage: none
 
       - name: Install Composer dependencies
@@ -31,6 +41,17 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          sed -i 's/REDIS_HOST=redis/REDIS_HOST=127.0.0.1/' .env
+          sed -i 's/DB_HOST=mariadb/DB_HOST=127.0.0.1/' .env
+
+      - name: Wait for redis
+        run: |
+          echo "Waiting for Redis..."
+          for i in 1 2 3 4 5; do
+            nc -z -w 1 127.0.0.1 6379 && break
+            echo "Attempt $i/5..."
+            sleep 3
+          done
 
       - name: Run PHPUnit tests
         run: composer test
