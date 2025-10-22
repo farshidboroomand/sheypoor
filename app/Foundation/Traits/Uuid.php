@@ -3,6 +3,7 @@
 namespace App\Foundation\Traits;
 
 use Illuminate\Support\Str;
+
 trait Uuid
 {
     protected static function boot(): void
