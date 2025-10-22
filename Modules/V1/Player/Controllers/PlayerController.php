@@ -3,6 +3,7 @@
 namespace Modules\V1\Player\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Modules\V1\Player\Models\Player;
 use Modules\V1\Player\Requests\StorePlayerRequest;
@@ -12,6 +13,8 @@ use Modules\V1\Player\Services\RankerService;
 
 class PlayerController extends Controller
 {
+    private const LIMIT = 10;
+
     public function __construct(private readonly RankerService $ranker) {}
 
     /**
@@ -68,5 +71,22 @@ class PlayerController extends Controller
     public function getPlayerRank(Player $player)
     {
         return new PlayerResource($player);
+    }
+
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function getTopPlayer(int $limit = self::LIMIT)
+    {
+        $topPlayers = $this->ranker->getTopPlayers($limit);
+        $playerIds = array_column($topPlayers, 'id');
+        /*** @phpstan-ignore-next-line */
+        $players = Player::query()
+            ->find($playerIds)
+            ?->sortBy(function (Player $player) use ($playerIds) {
+                return array_search($player->id, $playerIds, true);
+            })->values();
+
+        return PlayerResource::collection($players);
     }
 }

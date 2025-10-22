@@ -24,4 +24,25 @@ final class RankerService
 
         return $rank !== null ? (int) $rank + 1 : null;
     }
+
+    /**
+     * @return array<array<string, string>, mixed>
+     */
+    public function getTopPlayers(int $limit): array
+    {
+        /**
+         * @phpstan-ignore-next-line
+         */
+        $results = Redis::zrevrange(CacheKeyEnum::RANKING_BOARD_CACHE_KEY->value, 0, $limit - 1, 'WITHSCORES');
+        $players = [];
+        foreach ($results as $score => $userId) {
+            $score++;
+            $players[] = [
+                'id' => $userId,
+                'score' => (int) $score,
+            ];
+        }
+
+        return $players;
+    }
 }

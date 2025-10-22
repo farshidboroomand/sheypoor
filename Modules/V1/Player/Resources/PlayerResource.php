@@ -23,7 +23,9 @@ class PlayerResource extends JsonResource
             'id' => $this->id,
             'username' => $this->username,
             'score' => $this->score,
-            'rank' => (new RankerService)->getRank($this->id),
+            'rank' => (new RankerService)->getRank(
+                playerId: $this->id
+            ),
         ];
     }
 }
