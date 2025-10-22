@@ -8,4 +8,5 @@ Route::group([
     'namespace' => 'Player\Controllers',
 ], static function () {
     Route::post('/', [PlayerController::class, 'store'])->name('player.store');
+    Route::patch('/{player}/update_score', [PlayerController::class, 'updatePlayerScore'])->name('player.update.score');
 });

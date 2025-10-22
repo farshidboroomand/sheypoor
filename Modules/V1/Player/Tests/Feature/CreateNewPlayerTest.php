@@ -33,7 +33,7 @@ class CreateNewPlayerTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'message',
-            'errors'
+            'errors',
         ]);
     }
 }
