@@ -16,7 +16,6 @@ class CreateNewPlayerTest extends TestCase
         ];
 
         $response = $this->postJson(route('api.v1.player.store'), $body);
-
         $response->assertCreated();
 
         $this->assertDatabaseCount('players', 1);

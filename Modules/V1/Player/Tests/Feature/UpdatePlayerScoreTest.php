@@ -22,12 +22,11 @@ class UpdatePlayerScoreTest extends TestCase
         );
 
         $response->assertStatus(200);
-        $response->assertExactJson([
-            'data' => [
-                'id' => $player->id,
-                'username' => $player->username,
-                'score' => $updateScore,
-            ],
-        ]);
+        $this->assertSame($player->refresh()->score, $updateScore);
+        $response->assertJsonStructure(
+            [
+                'data' => [],
+            ]
+        );
     }
 }

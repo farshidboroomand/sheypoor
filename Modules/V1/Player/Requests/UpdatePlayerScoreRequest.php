@@ -22,7 +22,7 @@ class UpdatePlayerScoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'score' => 'integer|min:0',
+            'score' => 'required|integer|min:0',
         ];
     }
 }

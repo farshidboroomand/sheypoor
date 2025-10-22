@@ -8,9 +8,12 @@ use Modules\V1\Player\Models\Player;
 use Modules\V1\Player\Requests\StorePlayerRequest;
 use Modules\V1\Player\Requests\UpdatePlayerScoreRequest;
 use Modules\V1\Player\Resources\PlayerResource;
+use Modules\V1\Player\Services\RankerService;
 
 class PlayerController extends Controller
 {
+    public function __construct(private readonly RankerService $ranker) {}
+
     /**
      * @return PlayerResource
      */
@@ -22,6 +25,11 @@ class PlayerController extends Controller
                 'username' => $input['username'],
                 'score' => $input['score'] ?? 0,
             ]);
+
+        $this->ranker->storeOrUpdateScore(
+            playerId: $player->id,
+            score: $input['score'] ?? 0
+        );
 
         return new PlayerResource($player);
     }
@@ -43,9 +51,22 @@ class PlayerController extends Controller
             $row->score = $validatedScore['score'];
             $row->save();
 
+            $this->ranker->storeOrUpdateScore(
+                playerId: $player->id,
+                score: $validatedScore['score'] ?? 0
+            );
+
             return $row;
         });
 
+        return new PlayerResource($player);
+    }
+
+    /**
+     * @return PlayerResource
+     */
+    public function getPlayerRank(Player $player)
+    {
         return new PlayerResource($player);
     }
 }

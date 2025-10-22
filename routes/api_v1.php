@@ -9,4 +9,5 @@ Route::group([
 ], static function () {
     Route::post('/', [PlayerController::class, 'store'])->name('player.store');
     Route::patch('/{player}/update_score', [PlayerController::class, 'updatePlayerScore'])->name('player.update.score');
+    Route::get('/{player}/rank', [PlayerController::class, 'getPlayerRank'])->name('player.rank');
 });
