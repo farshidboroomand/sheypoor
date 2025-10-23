@@ -17,3 +17,6 @@ clean:
 
 test:
 	$(DOCKER_EXEC) php artisan test
+
+test-concurrency: fresh-db
+	$(DOCKER_EXEC) php artisan test:concurrency
